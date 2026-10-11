@@ -1,0 +1,860 @@
+openapi: 3.1.0
+info:
+  title: Kepler Learning Platform API
+  description: Comprehensive backend REST API specification for Kepler AI Learning Platform / PySustain frontend.
+  version: 1.1.0
+servers:
+  - url: http://localhost:3000/api
+    description: Next.js API Routes Server
+  - url: http://localhost:8000/api/v1
+    description: Python / Microservice Backend Service
+
+paths:
+  /auth/login:
+    post:
+      summary: Authenticate student credentials
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [password]
+              properties:
+                email:
+                  type: string
+                studentId:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '400':
+          description: Missing credentials
+
+  /auth/logout:
+    post:
+      summary: Invalidate current student session
+      operationId: logout
+      responses:
+        '200':
+          description: Successful logout
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+
+  /auth/me:
+    get:
+      summary: Get current authenticated student session
+      operationId: getMe
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Current user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentProfile'
+
+  /auth/profile:
+    get:
+      summary: Retrieve student profile details
+      operationId: getStudentProfile
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Student profile details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentProfile'
+    patch:
+      summary: Update student profile details
+      operationId: updateStudentProfile
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateProfileResponse'
+        '400':
+          description: Bad request or validation failure
+
+  /auth/change-password:
+    post:
+      summary: Change student account password
+      operationId: changePassword
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '200':
+          description: Password successfully changed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangePasswordResponse'
+        '400':
+          description: Incorrect current password, mismatch, or validation failure
+
+  /classroom/todos:
+    get:
+      summary: Get student classroom blackboard to-do tasks
+      operationId: getClassroomTodos
+      responses:
+        '200':
+          description: List of active todos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  todos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ClassroomTodoItem'
+    post:
+      summary: Create a new blackboard to-do task
+      operationId: createClassroomTodo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text:
+                  type: string
+                dueDate:
+                  type: string
+                topicId:
+                  type: string
+      responses:
+        '201':
+          description: Task created successfully
+
+  /classroom/todos/{id}:
+    patch:
+      summary: Toggle or update a classroom to-do item
+      operationId: updateClassroomTodo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                completed:
+                  type: boolean
+                text:
+                  type: string
+      responses:
+        '200':
+          description: Updated to-do item
+    delete:
+      summary: Delete a blackboard to-do item
+      operationId: deleteClassroomTodo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task deleted successfully
+
+  /dashboard/calendar:
+    get:
+      summary: Get academic calendar scheduled tests & quizzes
+      operationId: getCalendarEvents
+      responses:
+        '200':
+          description: Calendar event list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CalendarEvent'
+
+  /dashboard/schedule:
+    get:
+      summary: Get today's class schedule or empty state
+      operationId: getSchedule
+      responses:
+        '200':
+          description: Schedule items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schedule:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ScheduleItem'
+                  emptyMessage:
+                    type: string
+
+  /learn/subjects:
+    get:
+      summary: Get curriculum subjects catalog
+      operationId: getSubjects
+      responses:
+        '200':
+          description: Subject list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subjects:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SubjectItem'
+
+  /learn/chapters:
+    get:
+      summary: Get curriculum chapters for a subject
+      operationId: getChapters
+      parameters:
+        - name: subjectId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Chapters list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChaptersResponse'
+
+  /learn/material:
+    get:
+      summary: Get chapter study material and theory
+      operationId: getChapterMaterial
+      parameters:
+        - name: chapterId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Study material details
+
+  /learn/revision-notes:
+    get:
+      summary: Get chapter revision notes and key formulas
+      operationId: getRevisionNotes
+      parameters:
+        - name: topicId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Revision notes data
+
+  /learn/flashcards:
+    get:
+      summary: Get interactive flashcards for a topic
+      operationId: getFlashcards
+      parameters:
+        - name: topicId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Flashcard items
+
+  /test/quizzes:
+    get:
+      summary: Get available quizzes and diagnostics
+      operationId: getQuizzes
+      parameters:
+        - name: subject
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Quizzes catalog
+
+  /test/start:
+    get:
+      summary: Retrieve quiz questions without answer key
+      operationId: startQuiz
+      parameters:
+        - name: topicId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Quiz question items
+
+  /test/submit:
+    post:
+      summary: Submit quiz answers and calculate real score
+      operationId: submitQuiz
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [topicId, selectedAnswers]
+              properties:
+                topicId:
+                  type: string
+                selectedAnswers:
+                  type: object
+                timeSpentSeconds:
+                  type: number
+      responses:
+        '200':
+          description: Calculation results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitQuizResponse'
+
+  /test/results:
+    get:
+      summary: Get test result calculations or historical attempts
+      operationId: getTestResults
+      parameters:
+        - name: testId
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Test result data
+
+  /test/custom:
+    post:
+      summary: Generate custom practice questions
+      operationId: customPractice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [subjectId]
+              properties:
+                subjectId:
+                  type: string
+                chapterIds:
+                  type: array
+                  items:
+                    type: string
+                questionCount:
+                  type: integer
+      responses:
+        '200':
+          description: Generated custom question set
+
+  /ai/doubt-solve:
+    post:
+      summary: Process doubt question with Socratic, Detailed, or Exam mode
+      operationId: solveDoubt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DoubtSolveRequest'
+      responses:
+        '200':
+          description: AI doubt resolution output
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DoubtSolveResponse'
+
+  /ai/chat:
+    post:
+      summary: Send message to Allie AI Learning Module companion
+      operationId: chatWithAllie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+      responses:
+        '200':
+          description: Allie tutor dialogue response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendMessageResponse'
+
+  /ai/chat/history:
+    get:
+      summary: Get prior conversation history for active session
+      operationId: getChatHistory
+      parameters:
+        - name: sessionId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of session messages
+
+  /ai/chat/session/{sessionId}:
+    delete:
+      summary: Clear conversational session memory
+      operationId: clearChatSession
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Session cleared
+
+  /ai/doubts:
+    get:
+      summary: Get resolved doubts archive
+      operationId: getMyDoubts
+      responses:
+        '200':
+          description: Resolved doubts list
+
+  /score-booster/status:
+    get:
+      summary: Get current marks vs next goal marks
+      operationId: getScoreBoosterStatus
+      responses:
+        '200':
+          description: Booster engine status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoreBoosterStatus'
+
+  /score-booster/tasks:
+    get:
+      summary: Get personalized high-yield practice tasks
+      operationId: getScoreBoosterTasks
+      parameters:
+        - name: subject
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Recommended booster tasks
+
+  /score-booster/tasks/{id}/complete:
+    post:
+      summary: Complete booster task and trigger character jump
+      operationId: completeBoosterTask
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Updated marks and jump trigger
+
+  /mistakes:
+    get:
+      summary: Get logged incorrect test questions
+      operationId: getMistakes
+      responses:
+        '200':
+          description: Logged mistake analytics
+
+  /mistakes/{id}:
+    patch:
+      summary: Mark mistake as reviewed
+      operationId: updateMistake
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reviewed]
+              properties:
+                reviewed:
+                  type: boolean
+      responses:
+        '200':
+          description: Updated mistake item
+
+  /papers:
+    get:
+      summary: Retrieve past question papers and sample papers
+      operationId: getPapers
+      parameters:
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: subject
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: year
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of exam papers
+
+  /pdf:
+    get:
+      summary: Generate dynamic PDF study notes stream
+      operationId: getPdfStream
+      parameters:
+        - name: title
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: subject
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PDF binary stream
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    StudentProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        targetExam:
+          type: string
+        role:
+          type: string
+        phone:
+          type: string
+        grade:
+          type: string
+        school:
+          type: string
+
+    UpdateProfileRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        targetExam:
+          type: string
+        phone:
+          type: string
+        grade:
+          type: string
+        school:
+          type: string
+
+    UpdateProfileResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        student:
+          $ref: '#/components/schemas/StudentProfile'
+
+    ChangePasswordRequest:
+      type: object
+      required: [currentPassword, newPassword]
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
+          type: string
+        confirmPassword:
+          type: string
+
+    ChangePasswordResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        error:
+          type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        token:
+          type: string
+        student:
+          $ref: '#/components/schemas/StudentProfile'
+        error:
+          type: string
+
+    ClassroomTodoItem:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        completed:
+          type: boolean
+        dueDate:
+          type: string
+        topicId:
+          type: string
+
+    CalendarEvent:
+      type: object
+      properties:
+        id:
+          type: string
+        day:
+          type: integer
+        dateStr:
+          type: string
+        title:
+          type: string
+        subject:
+          type: string
+        durationMinutes:
+          type: integer
+        questionsCount:
+          type: integer
+        type:
+          type: string
+        timeStr:
+          type: string
+        status:
+          type: string
+
+    ScheduleItem:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        subject:
+          type: string
+        timeStr:
+          type: string
+        dateStr:
+          type: string
+
+    SubjectItem:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        displayTitle:
+          type: string
+        code:
+          type: string
+        category:
+          type: string
+        chaptersCount:
+          type: integer
+
+    ChaptersResponse:
+      type: object
+      properties:
+        subjectId:
+          type: string
+        subjectTitle:
+          type: string
+        chapters:
+          type: array
+          items:
+            type: object
+
+    DoubtSolveRequest:
+      type: object
+      required: [query, mode]
+      properties:
+        query:
+          type: string
+        mode:
+          type: string
+          enum: [socratic, detailed, exam]
+        searchType:
+          type: string
+
+    DoubtSolveResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        mode:
+          type: string
+        text:
+          type: string
+        latexFormulas:
+          type: array
+          items:
+            type: string
+        followUpHints:
+          type: array
+          items:
+            type: string
+        timestamp:
+          type: string
+
+    SendMessageRequest:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+        sessionId:
+          type: string
+        mode:
+          type: string
+
+    SendMessageResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        sessionId:
+          type: string
+        sender:
+          type: string
+        text:
+          type: string
+        timestamp:
+          type: string
+
+    ScoreBoosterStatus:
+      type: object
+      properties:
+        examName:
+          type: string
+        currentMarks:
+          type: number
+        nextGoalMarks:
+          type: number
+        tasksCompleted:
+          type: number
+        characterPlatform:
+          type: string
+          enum: [lower, jumping, higher]
+
+    ScoreBoosterTask:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        subject:
+          type: string
+        difficulty:
+          type: integer
+        completed:
+          type: boolean
+        pointsValue:
+          type: number
+
+    SubmitQuizResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        result:
+          type: object

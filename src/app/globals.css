@@ -1,0 +1,432 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Cedarville+Cursive&family=Kalam:wght@400;700&family=Patrick+Hand&family=Schoolbell&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0F172A;
+  --foreground: #F8FAFC;
+}
+
+body {
+  background-color: #0F172A;
+  color: #F8FAFC;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar for Allie chat container */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotate(1.5deg);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-sparkle {
+  animation: sparkle 3.5s ease-in-out infinite;
+}
+
+/* Levitating Angel Cat Keyframes */
+@keyframes catLevitate {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes catShadow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.32;
+  }
+  50% {
+    transform: scale(0.72);
+    opacity: 0.14;
+  }
+}
+
+.animate-cat-levitate {
+  animation: catLevitate 3.4s ease-in-out infinite;
+}
+
+.animate-cat-shadow {
+  animation: catShadow 3.4s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   AI ASSISTANT THINKING CAT ANIMATIONS
+   Triggered only while AI is formulating/thinking a response.
+   Features: Curious Head Tilt, Slow Cat Blinking, Gentle Tail/Breathing Bob,
+   Pulsing Halo Aura, Floating Thought Sparkles.
+   ========================================================================== */
+
+/* 1. Inquisitive Head Tilt & Subtle Body/Tail Bob */
+@keyframes catThinkingMotion {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg) scale(1, 1);
+  }
+  15% {
+    /* Curious head tilt to the right with inquisitive stretch */
+    transform: translateY(-2.5px) rotate(5.5deg) scale(1.02, 0.98);
+  }
+  32% {
+    /* Holds thoughtful pose with gentle tail/body sway */
+    transform: translateY(-1.5px) rotate(4.8deg) scale(0.99, 1.01);
+  }
+  50% {
+    /* Subtle head tilt to the left while pondering */
+    transform: translateY(-1px) rotate(-4.2deg) scale(1.01, 0.99);
+  }
+  68% {
+    /* Holds thoughtful contemplation */
+    transform: translateY(-2px) rotate(-3.5deg) scale(1, 1);
+  }
+  84% {
+    /* Light inquisitive chin lift */
+    transform: translateY(-3.5px) rotate(1.5deg) scale(1.02, 0.98);
+  }
+}
+
+.animate-cat-thinking {
+  animation: catThinkingMotion 3.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  transform-origin: 50% 85%;
+}
+
+/* 2. Slow Cat Blinking Keyframes (Natural, peaceful, reflective eye blink) */
+@keyframes catSlowBlink {
+  0%, 38%, 48%, 80%, 88%, 100% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  42%, 44% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  83%, 85% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.animate-cat-slow-blink {
+  animation: catSlowBlink 4.2s ease-in-out infinite;
+  transform-origin: top center;
+}
+
+/* 3. Synchronized Ground Shadow during Thinking */
+@keyframes catThinkingShadow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.32;
+  }
+  15%, 84% {
+    transform: scale(0.8);
+    opacity: 0.18;
+  }
+  50% {
+    transform: scale(0.92);
+    opacity: 0.25;
+  }
+}
+
+.animate-cat-thinking-shadow {
+  animation: catThinkingShadow 3.2s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+/* 4. Halo Warm Pulsing Glow */
+@keyframes catHaloPulse {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.92);
+    filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.3));
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.18);
+    filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.75));
+  }
+}
+
+.animate-cat-halo-pulse {
+  animation: catHaloPulse 1.9s ease-in-out infinite;
+}
+
+/* 5. Floating Thought Sparkles / Bubble */
+@keyframes thoughtBubbleFloat {
+  0% {
+    transform: translateY(0px) scale(0.9);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-6px) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0px) scale(0.9);
+    opacity: 0.5;
+  }
+}
+
+.animate-thought-float {
+  animation: thoughtBubbleFloat 2.2s ease-in-out infinite;
+}
+
+/* Crossfade & Intro Video Transition Keyframes */
+@keyframes enterAnimation {
+  from {
+    opacity: var(--tw-enter-opacity, 0);
+    transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0) scale3d(var(--tw-enter-scale, 1), var(--tw-enter-scale, 1), var(--tw-enter-scale, 1));
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+  }
+}
+
+.animate-in {
+  animation-name: enterAnimation;
+  animation-duration: 1000ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  --tw-enter-opacity: 0;
+}
+
+.zoom-in-95 {
+  --tw-enter-scale: 0.95;
+}
+
+.duration-1000 {
+  animation-duration: 1000ms;
+}
+
+.duration-700 {
+  animation-duration: 700ms;
+}
+
+/* Smooth Opacity Dissolve for Overlays and Crossfades */
+@keyframes fadeInSmooth {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in-smooth {
+  animation: fadeInSmooth 850ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.fade-in-smooth-delay {
+  animation: fadeInSmooth 950ms cubic-bezier(0.16, 1, 0.3, 1) 150ms both;
+}
+
+/* Chalk and Blackboard Typography */
+.font-chalk {
+  font-family: 'Schoolbell', 'Caveat', 'Patrick Hand', cursive, sans-serif;
+}
+
+.font-chalk-curvy {
+  font-family: 'Caveat', 'Cedarville Cursive', cursive, sans-serif;
+  font-feature-settings: "calt" 1, "liga" 1;
+}
+
+/* Real Dry Matte Chalk Typography (Pure Milky White, Zero Glow, Rough Imperfect Strokes) */
+.chalk-matte-filter {
+  filter: url(#chalk-roughness);
+}
+
+.chalk-welcome {
+  font-family: 'Caveat', 'Cedarville Cursive', cursive;
+  font-feature-settings: "calt" 1, "liga" 1;
+  color: #F8F8F4;
+  text-shadow: 0.4px 0.3px 0px rgba(255, 255, 255, 0.45), -0.3px -0.2px 0px rgba(230, 230, 220, 0.3);
+}
+
+.chalk-name {
+  font-family: 'Caveat', 'Cedarville Cursive', cursive;
+  font-feature-settings: "calt" 1, "liga" 1;
+  color: #FFFFFF;
+  text-shadow: 0.4px 0.4px 0px rgba(255, 255, 255, 0.5), -0.3px -0.2px 0px rgba(230, 230, 220, 0.35);
+}
+
+.chalk-sub {
+  font-family: 'Caveat', 'Cedarville Cursive', cursive;
+  font-feature-settings: "calt" 1, "liga" 1;
+  color: #EDEDE6;
+  text-shadow: 0.3px 0.2px 0px rgba(255, 255, 255, 0.35);
+}
+
+.chalk-meta {
+  font-family: 'Caveat', 'Cedarville Cursive', cursive;
+  font-feature-settings: "calt" 1, "liga" 1;
+  color: #DFDFD7;
+  text-shadow: 0.25px 0.2px 0px rgba(255, 255, 255, 0.25);
+}
+
+.chalk-dust {
+  color: #FFFFFF;
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.95), 0 0 3px rgba(255, 255, 255, 0.7), 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+.font-handwriting {
+  font-family: 'Patrick Hand', 'Caveat', cursive, sans-serif;
+}
+
+.chalk-text {
+  color: #FFFFFF;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.25);
+}
+
+.chalk-heading {
+  color: #FFFFFF;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.9), 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.whiteboard-chalk {
+  color: #FFFFFF;
+  text-shadow: 0 1px 3px rgba(15, 23, 42, 0.9), 0 0 4px rgba(15, 23, 42, 0.7);
+}
+
+/* Whiteboard Marker Handwriting (Samsung Jazz & Google Font fallbacks) */
+.font-whiteboard-marker {
+  font-family: 'Samsung Jazz', 'SamsungJazz', 'Patrick Hand', 'Caveat', 'Kalam', cursive, sans-serif;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+.marker-black {
+  color: #0F172A;
+  text-shadow: 0.25px 0.2px 0px rgba(15, 23, 42, 0.35);
+}
+
+.marker-header {
+  color: #09090B;
+  text-shadow: 0.35px 0.3px 0px rgba(9, 9, 11, 0.45);
+}
+
+/* ==========================================================================
+   SCORE BOOSTER CONTROLLED JUMP ANIMATION (Triggered on Task Completion)
+   Default: Character stays on lower platform (0, 0).
+   On Task Completion: Smooth parabolic jump to higher platform (210px, -64px).
+   ========================================================================== */
+
+/* 1. Default Idle State (Lower Platform) */
+.score-booster-idle-lower {
+  transform: translate(0px, 0px);
+}
+
+/* 2. Single Parabolic Jump on Task Completion (Plays once, lands on higher platform) */
+@keyframes scoreBoosterSingleJump {
+  0% {
+    transform: translate(0px, 0px) scale(1, 1);
+  }
+  12% {
+    /* Anticipation crouch / compression before launch */
+    transform: translate(0px, 4px) scale(1.15, 0.85);
+  }
+  24% {
+    /* Explosive upward takeoff / stretch */
+    transform: translate(24px, -32px) scale(0.9, 1.15) rotate(8deg);
+  }
+  48% {
+    /* Apex peak of the parabola high in the sky */
+    transform: translate(118px, -118px) scale(1, 1) rotate(0deg);
+  }
+  74% {
+    /* Impact landing on higher platform (cushioning squash) */
+    transform: translate(210px, -60px) scale(1.16, 0.84) rotate(0deg);
+  }
+  85%, 100% {
+    /* Proud standing on higher goal platform */
+    transform: translate(210px, -64px) scale(1, 1) rotate(0deg);
+  }
+}
+
+.score-booster-jumper-active {
+  animation: scoreBoosterSingleJump 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+/* 3. Stationed on Higher Platform after landing */
+.score-booster-idle-higher {
+  transform: translate(210px, -64px);
+}
+
+/* Single jump ground shadow animations */
+@keyframes singleJumpLowerShadow {
+  0%, 12% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  25%, 100% {
+    opacity: 0.08;
+    transform: scale(0.25);
+  }
+}
+
+@keyframes singleJumpHigherShadow {
+  0%, 45% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  74%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
+
+.score-booster-shadow-lower-active {
+  animation: singleJumpLowerShadow 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform-box: fill-box;
+  transform-origin: center center;
+}
+
+.score-booster-shadow-higher-active {
+  animation: singleJumpHigherShadow 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform-box: fill-box;
+  transform-origin: center center;
+}
+
+

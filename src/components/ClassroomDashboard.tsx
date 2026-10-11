@@ -511,14 +511,14 @@ export function ClassroomDashboard({
         {/* 16:9 Aspect ratio container mapped precisely to the classroom boards */}
         <div className="relative w-full max-w-[1720px] aspect-video max-h-[88vh] hidden md:block">
           {/* ========================================================================= */}
-          {/* GREEN CHALKBOARD (Left Board: 11.5% to 49% X, 18.5% to 52.5% Y)            */}
-          {/* Positioned in the vertical middle of the board, dry matte chalk, zero glow */}
+          {/* GREEN CHALKBOARD (Left Board: 11.5% to 49% X, 14.5% to 49% Y)              */}
+          {/* Positioned higher on the board, dry matte chalk, zero glow                 */}
           {/* ========================================================================= */}
           <section
             aria-label="Green Chalkboard Welcome Area"
-            className="absolute left-[11.5%] top-[18.5%] w-[37.5%] h-[34%] flex flex-col justify-center items-center text-center p-3 sm:p-4 overflow-hidden fade-in-smooth"
+            className="absolute left-[11.5%] top-[14.5%] w-[37.5%] h-[35%] flex flex-col justify-start items-center text-center p-3 sm:p-4 pt-2 lg:pt-3 overflow-hidden fade-in-smooth"
           >
-            <div className="chalk-matte-filter flex flex-col items-center justify-center text-center w-full max-w-lg mx-auto select-none">
+            <div className="chalk-matte-filter flex flex-col items-center justify-start text-center w-full max-w-lg mx-auto select-none">
               {/* "Welcome back," in rough, matte chalk */}
               <h1 className="chalk-welcome text-2xl lg:text-[2.2rem] font-medium leading-none">
                 Welcome back,
@@ -542,13 +542,13 @@ export function ClassroomDashboard({
           </section>
 
           {/* ========================================================================= */}
-          {/* WHITE BOARD (Right Board: 52% to 84% X, 20% to 52% Y)                     */}
+          {/* WHITE BOARD (Right Board: 52% to 84% X, 15.5% to 49% Y)                   */}
           {/* Natural Samsung Jazz marker writing directly on the whiteboard surface     */}
           {/* Only black/white marker ink, zero card lines, zero borders, zero boxy UI  */}
           {/* ========================================================================= */}
           <section
             aria-label="Whiteboard Student Tasks and Reminders"
-            className="absolute left-[52.5%] top-[19%] w-[31.8%] h-[30.5%] flex flex-col justify-between px-3 lg:px-5 pt-1.5 pb-2 overflow-hidden fade-in-smooth-delay font-whiteboard-marker text-slate-900 select-none pointer-events-auto"
+            className="absolute left-[52.5%] top-[15.5%] w-[31.8%] h-[34%] flex flex-col justify-between px-3 lg:px-5 pt-1 pb-2 overflow-hidden fade-in-smooth-delay font-whiteboard-marker text-slate-900 select-none pointer-events-auto"
           >
             {/* Top: Next Exam Marker Line */}
             <div className="flex items-center justify-between text-base lg:text-[1.15rem] marker-header tracking-wide pb-0.5">
